@@ -5,16 +5,20 @@ import com.Ajit.excpetion.NoSuchItemPresentInStore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Store {
+    private String id;
     private String name;
     private Address address;
     private Map<String, Long> inventory;
 
     public Store(String name, Address address) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.address = address;
         this.inventory = new HashMap<>();
+        populateHardCodeItem();
     }
 
     public String getName() {
@@ -46,6 +50,19 @@ public class Store {
 
     public void addItem(String item, int quantity) {
         updateItem(item, quantity);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    private void populateHardCodeItem() {
+        inventory.put("Sandwich", (long) 43);
+        inventory.put("Poha", (long) 32);
+        inventory.put("Burger", (long) 23);
+        inventory.put("Tea", (long) 34);
+        inventory.put("Coffee", (long) 35);
+        inventory.put("Bottled water", (long) 36);
     }
 
     @Override

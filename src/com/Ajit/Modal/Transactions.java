@@ -1,23 +1,23 @@
 package com.Ajit.Modal;
 
+import java.time.LocalDate;
+
 public class Transactions extends Audit {
     private String storeId;
     private String city;
     private String state;
     private String itemName;
-    private int date;
-    private int month;
-    private int year;
+    private long quantity;
+    LocalDate localDate;
     private double amount;
 
-    public Transactions(String storeId, String city, String state, String itemName, int date, int month, int year, double amount) {
+    public Transactions(String storeId, String city, String state, String itemName, long quantity, LocalDate localDate, double amount) {
         this.storeId = storeId;
         this.city = city;
         this.state = state;
         this.itemName = itemName;
-        this.date = date;
-        this.month = month;
-        this.year = year;
+        this.quantity = quantity;
+        this.localDate = localDate;
         this.amount = amount;
     }
 
@@ -41,16 +41,12 @@ public class Transactions extends Audit {
         return amount;
     }
 
-    public int getDate() {
-        return date;
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 
-    public int getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
+    public long getQuantity() {
+        return quantity;
     }
 
     @Override
@@ -60,9 +56,8 @@ public class Transactions extends Audit {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", itemName='" + itemName + '\'' +
-                ", date=" + date +
-                ", month=" + month +
-                ", year=" + year +
+                ", quantity=" + quantity +
+                ", localDate=" + localDate +
                 ", amount=" + amount +
                 '}';
     }

@@ -8,9 +8,13 @@ public class Command {
 
     public Command(String input) {
         String args[] = input.split("=");
-        if (args.length != 2) throw new InvalidCommandException(input + " command is not valid");
+        if (args.length > 2) throw new InvalidCommandException(input + " command is not valid");
         this.key = args[0];
-        this.value = args[1];
+        if (args.length > 1) {
+            this.value = args[1];
+        } else {
+            this.value = "";
+        }
     }
 
     public String getKey() {

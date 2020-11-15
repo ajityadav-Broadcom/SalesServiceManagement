@@ -1,7 +1,14 @@
 package com.Ajit.service;
 
+import com.Ajit.Modal.Command;
 import com.Ajit.Modal.Store;
+import com.Ajit.Modal.Transactions;
+import com.Ajit.excpetion.InsufficientResourcesException;
+import com.Ajit.excpetion.NoSuchItemPresentInStore;
+import com.Ajit.excpetion.NoSuchStorePresent;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,29 +26,75 @@ Questions that the system needs to answer are as given below. Please add test ca
 public class SalesService {
     private Map<String, Store> storeMap;
     private TransactionService transactionService;
+    private static SalesService _instance;
 
-    public SalesService(TransactionService transactionService) {
+    private SalesService(TransactionService transactionService) {
         this.storeMap = new HashMap<>();
         this.transactionService = transactionService;
     }
+
+    public static synchronized SalesService getInstance(TransactionService transactionService) {
+        if (_instance == null) {
+            _instance = new SalesService(transactionService);
+        }
+        return _instance;
+    }
+
+    public String addStore(Store store) {
+        storeMap.put(store.getId(), store);
+        return store.getId();
+    }
+
 
     public void addItem(String storeId, String item, long quantity) {
         return;
     }
 
-    public void sellItem(final String storeId, String item, long quantity) {
-
+    public void sellItem(final String storeId, String item, long quantity) throws NoSuchItemPresentInStore, InsufficientResourcesException {
+        if (!storeMap.containsKey(storeId)) {
+            throw new NoSuchStorePresent("store with storeId" + storeId + " does not present in our database");
+        }
+        Store store = storeMap.get(storeId);
+        store.sellItem(item, quantity);
+        transactionService.addTransaction(new Transactions(storeId, store.getAddress().getCity(), store.getAddress().getState(), item, quantity, LocalDate.now(), 53));
     }
 
-    public Map<String, Integer> stockLeftInStore(final String storeId) {
+    public Map<String, Long> stockLeftInStore(final String storeId) {
+        if (!storeMap.containsKey(storeId)) {
+            throw new NoSuchStorePresent("store with storeId " + storeId + " does not present in our database");
+        }
+        Store store = storeMap.get(storeId);
+        return store.getInventory();
+    }
+
+    public Map<String, Map<String, Long>> getDailySalesReport(String query) {
+        Command command = new Command(query);
+        if (!command.getValue().isEmpty()) {
+            return getSalesByValue(command);
+        } else {
+            return getSalesByKey(command);
+        }
+    }
+
+    private Map<String, Map<String, Long>> getSalesByKey(Command command) {
+        System.out.println(command.getKey());
+        if (command.getKey().equalsIgnoreCase("city")) {
+            return transactionService.getDailyCitySales();
+        } else if (command.getKey().equalsIgnoreCase("state")) {
+            return transactionService.getDailyStateSales();
+        } else if (command.getKey().equalsIgnoreCase("all")) {
+            return transactionService.getDailyCitySales();
+        }
         return null;
     }
 
-    public Map<String, Integer> getDailySalesReport(String query) {
+    private Map<String, Map<String, Long>> getSalesByValue(Command command) {
         return null;
     }
 
     public Map<String, Integer> getMonthlyItemSales(String query) {
         return null;
     }
+
+
 }

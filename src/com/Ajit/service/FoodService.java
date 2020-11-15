@@ -43,4 +43,8 @@ public class FoodService {
         }
         return supportedFood.get(item);
     }
+
+    public void addSupportedItem(String itemName, String category) {
+        supportedFood.put(itemName, category);
+    }
 }
