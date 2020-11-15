@@ -8,6 +8,7 @@ import com.Ajit.excpetion.NoSuchItemPresentInStore;
 import com.Ajit.excpetion.NoSuchStorePresent;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,9 +93,12 @@ public class SalesService {
         return null;
     }
 
-    public Map<String, Integer> getMonthlyItemSales(String query) {
-        return null;
+    public Map<String, Long> getMonthlyItemSales(String query) {
+        YearMonth yearMonth = YearMonth.now();
+        return getMonthlyItemSales(query, yearMonth);
     }
 
-
+    public Map<String, Long> getMonthlyItemSales(String query, YearMonth yearMonth) {
+        return transactionService.getMonthlySalesOfItem(query, yearMonth);
+    }
 }

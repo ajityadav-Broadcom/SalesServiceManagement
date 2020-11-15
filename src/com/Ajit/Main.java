@@ -204,6 +204,11 @@ public class Main {
         for (String item : inventory.keySet()) {
             System.out.println(item + " " + inventory.get(item));
         }
+        Map<String, Long> coffeeSalesInMonth = salesService.getMonthlyItemSales("Coffee");
+        System.out.println(coffeeSalesInMonth.size());
+        for (String item : coffeeSalesInMonth.keySet()) {
+            System.out.println(item + " " + coffeeSalesInMonth.get(item));
+        }
     }
 
 }

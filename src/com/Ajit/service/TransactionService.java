@@ -109,16 +109,11 @@ public class TransactionService {
         return sales;
     }
 
-    public Map<String, Long> getMonthlySalesOfItem(String itemName) {
-        YearMonth yearMonth = YearMonth.now();
-        return getMonthlySalesOfItem(itemName, yearMonth);
-    }
-
-    private Map<String, Long> getMonthlySalesOfItem(String itemName, YearMonth yearMonth) {
+    public Map<String, Long> getMonthlySalesOfItem(String itemName, YearMonth yearMonth) {
         Map<String, Long> sales = new HashMap<>();
         List<Transactions> transactionsList = monthlySales.get(yearMonth);
         for (Transactions transactions : transactionsList) {
-            if (transactions.getItemName().equals(itemName)) {
+            if (transactions.getItemName().equalsIgnoreCase(itemName)) {
                 sales.put(itemName, sales.getOrDefault(itemName, (long) 0) + transactions.getQuantity());
             }
         }
